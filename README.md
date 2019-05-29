@@ -1,1 +1,1 @@
-# Word-Find-Kata
+# word-find-kata
