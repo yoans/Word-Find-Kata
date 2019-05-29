@@ -1,31 +1,39 @@
-module.exports = (grid) => (word) => {
+const {range} = require('ramda');
+const getStartingCoordinateInfo = (grid, word) => {
     let startXIndex;
     let startYIndex;
     let reversed;
-    const didFindWord = grid.find((row, yIndex)=>{
-        let xindex = row.indexOf(word)
+    const foundWord = grid.find((row, yIndex)=>{
+        let xIndex = row.indexOf(word)
         startYIndex = yIndex;
 
-        if(xindex>=0){
-            startXIndex = xindex;
+        if(xIndex>=0){
+            startXIndex = xIndex;
             return true 
         }
-        
-        xindex = row.indexOf(word.split('').reverse().join());
+        const reversedWord = word.split('').reverse().join();
+        xIndex = row.indexOf(reversedWord);
 
-        if(xindex>=0){
-            startXIndex = xindex;
+        if(xIndex>=0){
+            startXIndex = xIndex;
             reversed = true;
             return true 
         }
     })
+    return {startXIndex, startYIndex, reversed, foundWord}
+}
+const searchHorizontally = (grid, word) => {
+    const {startXIndex, startYIndex, reversed, foundWord} = getStartingCoordinateInfo(grid, word);
 
-    if(didFindWord){
-        const coordinates = Array.from({length: word.length}).map((_,index)=>`(${startXIndex+index},${startYIndex})`);
-        let orderdCoordinates = coordinates;
-        if(reversed){
-            orderdCoordinates = coordinates.reverse();
-        }
-        return `${word}: ${orderdCoordinates}`
-    }
+    if(foundWord){
+        const coordinates = range(0, word.length).map((index)=>`(${startXIndex+index},${startYIndex})`);
+        const orderedCoordinates = reversed ? coordinates.reverse() : coordinates;
+        return `${word}: ${orderedCoordinates}`
+    };
+}
+
+
+
+module.exports = (grid) => (word) => {
+    return searchHorizontally(grid, word);
 }

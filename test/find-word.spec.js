@@ -20,4 +20,12 @@ describe('find words', ()=>{
 
         expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
     })
+    it('basic search vertically', ()=>{
+        const word = chance.word();
+        const grid = word.split('');
+        const coordinates = findWord(grid)(word);
+        const expectedCoordinates = word.split('').map((_,index)=>`(0,${index})`).join()
+
+        expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+    })
 })
