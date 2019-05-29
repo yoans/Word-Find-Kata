@@ -11,7 +11,7 @@ const getStartingCoordinateInfo = (grid, word) => {
             startXIndex = xIndex;
             return true 
         }
-        const reversedWord = word.split('').reverse().join();
+        const reversedWord = word.split('').reverse().join('');
         xIndex = row.indexOf(reversedWord);
 
         if(xIndex>=0){
@@ -48,10 +48,9 @@ const swapXandY = (grid) => {
 };
 const searchVertically = (grid, word) => {
     const gridTransform = swapXandY(grid);
-    const {startYIndex = startXIndex, startXIndex = startYIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
-
+    const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
     if(foundWord){
-        const coordinates = range(0, word.length).map((index)=>`(${startXIndex},${startYIndex+index})`);
+        const coordinates = range(0, word.length).map((index)=>`(${startYIndex},${startXIndex+index})`);
         const orderedCoordinates = conditionallyReverse(reversed, coordinates);
         return convertToString(word, orderedCoordinates);
     };
