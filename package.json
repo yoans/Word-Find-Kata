@@ -1,0 +1,12 @@
+{
+  "main": "index.js",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "devDependencies": {
+    "chance": "1.0.18",
+    "sinon": "7.3.2",
+    "mocha": "6.1.4",
+    "proxyquire": "2.1.0"
+  }
+}
