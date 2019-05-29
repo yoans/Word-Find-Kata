@@ -1,23 +1,31 @@
 module.exports = (grid) => (word) => {
     let startXIndex;
     let startYIndex;
+    let reversed;
     const didFindWord = grid.find((row, yIndex)=>{
-        const xindex = row.indexOf(word)
-            console.log(
-               {xindex,
-                row,word} 
-            );
+        let xindex = row.indexOf(word)
+        startYIndex = yIndex;
+
         if(xindex>=0){
             startXIndex = xindex;
-            startYIndex = yIndex;
+            return true 
+        }
+        
+        xindex = row.indexOf(word.split('').reverse().join());
+
+        if(xindex>=0){
+            startXIndex = xindex;
+            reversed = true;
             return true 
         }
     })
-    console.log(
-       {didFindWord} 
-    );
+
     if(didFindWord){
-        const coordinates = Array.from({length: word.length}).map((_,index)=>`(${startXIndex+index},${startYIndex})`)
-        return `${word}: ${coordinates}`
+        const coordinates = Array.from({length: word.length}).map((_,index)=>`(${startXIndex+index},${startYIndex})`);
+        let orderdCoordinates = coordinates;
+        if(reversed){
+            orderdCoordinates = coordinates.reverse();
+        }
+        return `${word}: ${orderdCoordinates}`
     }
 }

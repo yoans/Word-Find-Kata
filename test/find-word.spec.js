@@ -11,4 +11,13 @@ describe('find words', ()=>{
 
         expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
     })
+    it('basic search horizontally reversed', ()=>{
+        const word = chance.word();
+        const reversedWord = word.split('').reverse().join();
+        const grid = [reversedWord];
+        const coordinates = findWord(grid)(word);
+        const expectedCoordinates = word.split('').map((_,index)=>`(${index},0)`).reverse().join()
+
+        expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+    })
 })
