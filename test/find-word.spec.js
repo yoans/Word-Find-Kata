@@ -4,10 +4,11 @@ const Chance = require('chance');
 const chance = new Chance();
 describe('find words', ()=>{
     it('basic search horizontally', ()=>{
-        const grid = [['SCOTTY']];
         const word = chance.word();
+        const grid = [word];
         const coordinates = findWord(grid)(word);
-        
-        expect(coordinates).to.eql('SCOTTY: (0,0),(1,0),(2,0),(3,0),(4,0),(5,0)');
+        const expectedCoordinates = word.split('').map((_,index)=>`(${index},0)`).join()
+
+        expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
     })
 })
