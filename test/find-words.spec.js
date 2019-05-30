@@ -22,7 +22,7 @@ describe('find words', ()=>{
             returnedStrings.push(randomString);
             return [word];
         });
-        const result = findWords(grid,words);
+        const result = findWords({grid,words});
         expect(findWordInGrid.args).to.eql(expectedCallArgs);
         expect(result).to.eql(returnedStrings.join('\n'));
     })
