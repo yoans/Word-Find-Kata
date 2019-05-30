@@ -5,7 +5,7 @@ const chance = new Chance();
 const {range} = require('ramda');
 const noPalindrome = (word) => word === word.split('').reverse().join('') ? noPalindrome(word+chance.word()) : word;
 describe('find words', ()=>{
-    range(0,10).forEach(()=>{
+    range(0,1).forEach(()=>{
         it('basic search horizontally', ()=>{
             const word = chance.word();
             const grid = [word];
@@ -56,11 +56,10 @@ describe('find words', ()=>{
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('basic search diagonally descending', ()=>{
-            const word = chance.word({length:8});
+            const word = chance.word();
             const grid = word.split('').map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>(xIndex===yIndex)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index})`).join(',');
-    
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('basic search diagonally descending reversed', ()=>{
@@ -69,6 +68,22 @@ describe('find words', ()=>{
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index})`).reverse().join(',');
     
+            expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+        })
+        it('offset search diagonally descending', ()=>{
+            const word = chance.word({length:8});
+            const grid = ['.',...word.split('')].map((character, yIndex)=>range(0, word.length+1).map((_,xIndex)=>(xIndex===yIndex-1)?character:`.`).join(''));
+            const coordinates = findWord(grid)(word);
+            const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index+1})`).join(',');
+            console.log({grid});
+            expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+        })
+        it('offset search diagonally descending reversed', ()=>{
+            const word = noPalindrome(chance.word({length:8}));
+            const grid = ['.',...word.split('')].reverse().map((character, yIndex)=>range(0, word.length+1).map((_,xIndex)=>(xIndex-1===yIndex)?character:`.`).join(''));
+            const coordinates = findWord(grid)(word);
+            const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index})`).reverse().join(',');
+            console.log({grid});
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
     })
