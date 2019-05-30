@@ -1,11 +1,8 @@
 const {expect} = require('chai');
-const Chance = require('chance');
-const chance = new Chance();
-const {range} = require('ramda');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const MODULE_PATH = '../index';
-describe.only('Run word find', ()=>{
+describe('Run word find', ()=>{
     it('Loads sample puzzle from data folder', ()=>{
         const err = undefined;
         const data = Symbol('Data from sample file');
