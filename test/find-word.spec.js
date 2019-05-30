@@ -53,4 +53,12 @@ describe('find words', ()=>{
 
         expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
     })
+    it('basic search diagonally descending', ()=>{
+        const word = chance.word();
+        const grid = word.split('').map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>(xIndex===yIndex)?character:`.`).join(''));
+        const coordinates = findWord(grid)(word);
+        const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index})`).join(',');
+
+        expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+    })
 })
