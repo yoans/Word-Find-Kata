@@ -49,10 +49,22 @@ const swapXandY = (grid) => {
 const shiftColumnsUpByYIndex = (grid) => {
     const newGrid = [];
     grid.forEach((row, yIndex)=>{
-        const maxIndex = row.length-1; 
         row.split('').forEach((character, xIndex)=>{
             if(!newGrid[yIndex+xIndex]){
-                newGrid[yIndex+xIndex] = range(0,yIndex).map(()=>' ')
+                newGrid[yIndex+xIndex] = []
+            }
+            newGrid[yIndex+xIndex].push(character) 
+        });
+    });
+    return newGrid.map(row=>row.join('')); 
+};
+const shiftColumnsDownByYIndex = (grid) => {
+    const newGrid = [];
+    grid.forEach((row, yIndex)=>{
+        const maxIndex = row.length-1; 
+        row.split('').reverse().forEach((character, xIndex)=>{
+            if(!newGrid[yIndex+xIndex]){
+                newGrid[yIndex+xIndex] = []
             }
             newGrid[yIndex+xIndex].push(character) 
         });
@@ -78,9 +90,18 @@ const searchAscending = (grid, word) => {
         return convertToString(word, orderedCoordinates);
     };
 }
+const searchDescending = (grid, word) => {
+    const gridTransform = shiftColumnsDownByYIndex(grid);
+    const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
+    if(foundWord){
+        const coordinates = range(0, word.length).map((index)=>`(${startXIndex+index},${startYIndex+index-word.length+1})`);
+        const orderedCoordinates = conditionallyReverse(reversed, coordinates);
+        return convertToString(word, orderedCoordinates);
+    };
+}
 
 
 
 module.exports = (grid) => (word) => {
-    return searchHorizontally(grid, word) || searchVertically(grid, word) || searchAscending(grid, word);
+    return searchHorizontally(grid, word) || searchVertically(grid, word) || searchAscending(grid, word) || searchDescending(grid, word);
 }
