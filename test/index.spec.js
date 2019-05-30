@@ -27,7 +27,7 @@ describe('Run word find', ()=>{
         expect(fileParser.args).to.eql([[data]]);
         expect(findWords.args).to.eql([[parsedData]]);
     })
-    it.only('Live Test', ()=>{
+    it('Live Test', (done)=>{
         const expectedLog = [
             'BONES: (0,6),(0,7),(0,8),(0,9),(0,10)',
             'KHAN: (5,9),(5,8),(5,7),(5,6)',
@@ -37,7 +37,13 @@ describe('Run word find', ()=>{
             'SULU: (3,3),(2,2),(1,1),(0,0)',
             'UHURA: (4,0),(3,1),(2,2),(1,3),(0,4)',
         ].join('\n');
-        require(MODULE_PATH);
-        console.log({expectedLog});
+        const findWords = sinon.spy(require('../src/find-words'));
+        let returnVal;
+        proxyquire(MODULE_PATH,{
+            './src/find-words': (args)=>{
+                expect(findWords(args)).to.eql(expectedLog);
+                done();
+            }
+        });
     })
 })
