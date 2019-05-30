@@ -1,4 +1,5 @@
 const fs = require('fs');
-fs.readFile('./data/sample-grid.txt',()=>{
-    
+const fileParser = require('./src/file-parser');
+fs.readFile('./data/sample-grid.txt',(_,data)=>{
+    fileParser(data);
 });
