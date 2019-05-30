@@ -15,7 +15,15 @@ describe('find words', ()=>{
         const findWords = proxyquire(MODULE_PATH,{
             './find-word': findWord
         })
-        findWords(words,grid);
-        expect(findWordInGrid.args).to.eql(words.map((word)=>[word]))
+        const returnedStrings = [];
+        const expectedCallArgs = words.map((word)=>{
+            const randomString = chance.word();
+            findWordInGrid.withArgs(word).returns(randomString);
+            returnedStrings.push(randomString);
+            return [word];
+        });
+        const result = findWords(grid,words);
+        expect(findWordInGrid.args).to.eql(expectedCallArgs);
+        expect(result).to.eql(returnedStrings.join('\n'));
     })
 }) 

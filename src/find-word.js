@@ -100,8 +100,6 @@ const searchDescending = (grid, word) => {
     };
 }
 
-
-
 module.exports = (grid) => (word) => {
     return searchHorizontally(grid, word) || searchVertically(grid, word) || searchAscending(grid, word) || searchDescending(grid, word);
 }
