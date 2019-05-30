@@ -5,7 +5,7 @@ const chance = new Chance();
 const {range} = require('ramda');
 const noPalindrome = (word) => word === word.split('').reverse().join('') ? noPalindrome(word+chance.word()) : word;
 describe('find words', ()=>{
-    range(0,1000).forEach(()=>{
+    range(0,10).forEach(()=>{
         it('basic search horizontally', ()=>{
             const word = chance.word();
             const grid = [word];
