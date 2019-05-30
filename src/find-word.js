@@ -64,7 +64,7 @@ const shiftColumnsDownByYIndex = (grid) => {
         const maxIndex = row.length-1; 
         row.split('').reverse().forEach((character, xIndex)=>{
             if(!newGrid[yIndex+xIndex]){
-                newGrid[yIndex+xIndex] = []
+                newGrid[yIndex+xIndex] = range(0,maxIndex-xIndex).map(()=>'-')
             }
             newGrid[yIndex+xIndex].push(character) 
         });
@@ -93,8 +93,12 @@ const searchAscending = (grid, word) => {
 const searchDescending = (grid, word) => {
     const gridTransform = shiftColumnsDownByYIndex(grid);
     const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
+    console.log({gridTransform});
     if(foundWord){
-        const coordinates = range(0, word.length).map((index)=>`(${startXIndex+index},${startYIndex+index-word.length+1})`);
+        const calculatedXStart = startXIndex;
+        const calculatedYStart = startYIndex+startXIndex-grid.length+1;
+    console.log({startYIndex, startXIndex, reversed, foundWord,wordlength: word.length,calculatedYStart});
+        const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart+index},${calculatedYStart+index})`);
         const orderedCoordinates = conditionallyReverse(reversed, coordinates);
         return convertToString(word, orderedCoordinates);
     };
