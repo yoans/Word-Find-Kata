@@ -45,4 +45,12 @@ describe('find words', ()=>{
         
         expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
     })
+    it('basic search diagonally ascending reverse', ()=>{
+        const word = chance.word();
+        const grid = word.split('').map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>((xIndex+yIndex)===word.length-1)?character:`.`).join(''));
+        const coordinates = findWord(grid)(word);
+        const expectedCoordinates = word.split('').map((_,index)=>`(${index},${word.length-1-index})`).reverse().join(',');
+
+        expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
+    })
 })
