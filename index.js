@@ -1,2 +1,2 @@
 const fs = require('fs');
-fs.readFile();
+fs.readFile('./data/sample-grid.txt');

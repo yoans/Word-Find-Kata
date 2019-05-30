@@ -14,6 +14,7 @@ describe.only('Run word find', ()=>{
                     readFile
                 }
             });
+            readFile.args[0][1]();
             expect(readFile.args.length).to.eql(1);
             expect(readFile.args[0][0]).to.eql('./data/sample-grid.txt');
         })
