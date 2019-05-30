@@ -83,9 +83,14 @@ const searchVertically = (grid, word) => {
 const searchAscending = (grid, word) => {
     const gridTransform = shiftColumnsUpByYIndex(grid);
 
+    console.log({grid,gridTransform});
     const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
+    console.log({startYIndex, startXIndex, reversed, foundWord});
     if(foundWord){
-        const coordinates = range(0, word.length).map((index)=>`(${startXIndex+startYIndex-index},${startXIndex+index})`);
+        const calculatedXStart = startXIndex+startYIndex;
+        const calculatedYStart = startXIndex;
+    console.log({startYIndex, startXIndex, reversed, foundWord,wordlength: word.length,calculatedYStart});
+        const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart-index},${calculatedYStart+index})`);
         const orderedCoordinates = conditionallyReverse(reversed, coordinates);
         return convertToString(word, orderedCoordinates);
     };
@@ -93,11 +98,10 @@ const searchAscending = (grid, word) => {
 const searchDescending = (grid, word) => {
     const gridTransform = shiftColumnsDownByYIndex(grid);
     const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
-    console.log({gridTransform});
     if(foundWord){
+        console.log({grid,gridTransform});
         const calculatedXStart = startXIndex;
         const calculatedYStart = startYIndex+startXIndex-grid.length+1;
-    console.log({startYIndex, startXIndex, reversed, foundWord,wordlength: word.length,calculatedYStart});
         const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart+index},${calculatedYStart+index})`);
         const orderedCoordinates = conditionallyReverse(reversed, coordinates);
         return convertToString(word, orderedCoordinates);
