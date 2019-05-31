@@ -2,6 +2,7 @@ const {expect} = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const MODULE_PATH = '../index';
+const fake = true;
 describe('Run word find', ()=>{
     it('Loads sample puzzle from data folder', ()=>{
         const err = undefined;
@@ -15,10 +16,11 @@ describe('Run word find', ()=>{
         
         proxyquire(MODULE_PATH,{
             fs:{
-                readFile
+                readFile,
+                fake
             },
             './src/file-parser': fileParser,
-            './src/find-words': findWords
+            './src/find-words': findWords,
         });
         readFile.args[0][1](err, data);
         
@@ -44,7 +46,8 @@ describe('Run word find', ()=>{
             './src/find-words': (args)=>{
                 expect(findWords(args)).to.eql(expectedLog);
                 done();
-            }
+            },
+            'fs':{fake},
         });
     })
 })
