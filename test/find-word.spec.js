@@ -4,7 +4,7 @@ const Chance = require('chance');
 const chance = new Chance();
 const {range} = require('ramda');
 const noPalindrome = (word) => word === word.split('').reverse().join('') ? noPalindrome(word+chance.word()) : word;
-describe('find words', ()=>{
+describe('find a word', ()=>{
     range(0,1).forEach(()=>{
         it('basic search horizontally', ()=>{
             const word = chance.word();
@@ -39,49 +39,31 @@ describe('find words', ()=>{
     
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
-        it('basic search diagonally ascending', ()=>{
-            const word = chance.word();
+
+        it('basic search diagonally ascending reversed', ()=>{
+            const word = noPalindrome(chance.word({length:8}));
             const grid = word.split('').map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>((xIndex+yIndex)===word.length-1)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${word.length-1-index})`).reverse().join(',');
-    
-            expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
-        })
-        it('basic search diagonally ascending reversed', ()=>{
-            const word = noPalindrome(chance.word());
-            const grid = word.split('').reverse().map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>((xIndex+yIndex)===word.length-1)?character:`.`).join(''));
-            const coordinates = findWord(grid)(word);
-            const expectedCoordinates = word.split('').map((_,index)=>`(${index},${word.length-1-index})`).join(',');
 
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
-        it('offset basic search diagonally ascending', ()=>{
-            const word = chance.word();
+        it('offset basic search diagonally ascending reversed', ()=>{
+            const word = noPalindrome(chance.word({length:8}));
             const grid = [...word.split(''),'.']
                 .map((character, yIndex)=>range(0, word.length+1)
                 .map((_,xIndex)=>((xIndex+yIndex)===word.length-1)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${word.length-1-index})`).reverse().join(',');
-    
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
-        it('offset basic search diagonally ascending reversed', ()=>{
-            const word = noPalindrome(chance.word());
-            const grid = ['.',...word.split('')]
-                .reverse().map((character, yIndex)=>range(0, word.length+1)
-                .map((_,xIndex)=>((xIndex+yIndex)===word.length-1)?character:`.`).join(''));
-            const coordinates = findWord(grid)(word);
-            const expectedCoordinates = word.split('').map((_,index)=>`(${index},${word.length-1-index})`).join(',');
-
-            expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
-        })
-        it.only('opposite offset basic search diagonally ascending reversed', ()=>{
+        it('opposite offset basic search diagonally ascending reversed', ()=>{
             const word = noPalindrome(chance.word({length:8}));
-            const grid = [...word.split(''),'.']
-                .reverse().map((character, yIndex)=>range(0, word.length+1)
+            const grid = ['.',...word.split('')]
+                .map((character, yIndex)=>range(0, word.length+1)
                 .map((_,xIndex)=>((xIndex+yIndex)===word.length+1)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
-            const expectedCoordinates = word.split('').map((_,index)=>`(${index+1},${word.length-1-index})`).join(',');
+            const expectedCoordinates = word.split('').map((_,index)=>`(${index+1},${word.length-index})`).reverse().join(',');
 
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
@@ -90,6 +72,7 @@ describe('find words', ()=>{
             const grid = word.split('').map((character, yIndex)=>range(0, word.length).map((_,xIndex)=>(xIndex===yIndex)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index})`).join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('basic search diagonally descending reversed', ()=>{
@@ -105,6 +88,7 @@ describe('find words', ()=>{
             const grid = ['.',...word.split('')].map((character, yIndex)=>range(0, word.length+1).map((_,xIndex)=>(xIndex===yIndex-1)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index+1})`).join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('more offset search diagonally descending', ()=>{
@@ -112,6 +96,7 @@ describe('find words', ()=>{
             const grid = ['.','.',...word.split('')].map((character, yIndex)=>range(0, word.length+2).map((_,xIndex)=>(xIndex===yIndex-2)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index+2})`).join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('even more offset search diagonally descending', ()=>{
@@ -119,6 +104,7 @@ describe('find words', ()=>{
             const grid = ['.','.','.',...word.split('')].map((character, yIndex)=>range(0, word.length+3).map((_,xIndex)=>(xIndex===yIndex-3)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index},${index+3})`).join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('offset search diagonally descending reversed', ()=>{
@@ -126,6 +112,7 @@ describe('find words', ()=>{
             const grid = ['.',...word.split('')].reverse().map((character, yIndex)=>range(0, word.length+1).map((_,xIndex)=>(xIndex-1===yIndex)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index+1},${index})`).reverse().join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
         it('more offset search diagonally descending reversed', ()=>{
@@ -133,6 +120,7 @@ describe('find words', ()=>{
             const grid = ['.','.',...word.split('')].reverse().map((character, yIndex)=>range(0, word.length+2).map((_,xIndex)=>(xIndex-2===yIndex)?character:`.`).join(''));
             const coordinates = findWord(grid)(word);
             const expectedCoordinates = word.split('').map((_,index)=>`(${index+2},${index})`).reverse().join(',');
+
             expect(coordinates).to.eql(`${word}: ${expectedCoordinates}`);
         })
     })

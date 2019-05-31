@@ -36,6 +36,7 @@ describe('Run word find', ()=>{
             'SPOCK: (2,1),(3,2),(4,3),(5,4),(6,5)',
             'SULU: (3,3),(2,2),(1,1),(0,0)',
             'UHURA: (4,0),(3,1),(2,2),(1,3),(0,4)',
+            'CDZID: (10,14),(11,13),(12,12),(13,11),(14,10)',
         ].join('\n');
         const findWords = sinon.spy(require('../src/find-words'));
         let returnVal;

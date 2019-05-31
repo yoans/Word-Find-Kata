@@ -46,27 +46,16 @@ const swapXandY = (grid) => {
     });
     return newGrid;
 };
-const shiftColumnsUpByYIndex = (grid) => {
-    const newGrid = [];
-    grid.forEach((row, yIndex)=>{
-        row.split('').forEach((character, xIndex)=>{
-            if(!newGrid[yIndex+xIndex]){
-                newGrid[yIndex+xIndex] = []
-            }
-            newGrid[yIndex+xIndex].push(character) 
-        });
-    });
-    return newGrid.map(row=>row.join('')); 
-};
-const shiftColumnsDownByYIndex = (grid) => {
+
+const shiftColumns = (grid) => {
     const newGrid = [];
     grid.forEach((row, yIndex)=>{
         const maxIndex = row.length-1; 
         row.split('').reverse().forEach((character, xIndex)=>{
             if(!newGrid[yIndex+xIndex]){
-                newGrid[yIndex+xIndex] = range(0,maxIndex-xIndex).map(()=>'-')
+                newGrid[yIndex+xIndex] = range(0,maxIndex-xIndex).map(()=>'-');
             }
-            newGrid[yIndex+xIndex].push(character) 
+            newGrid[yIndex+xIndex].push(character);
         });
     });
     return newGrid.map(row=>row.join('')); 
@@ -81,25 +70,21 @@ const searchVertically = (grid, word) => {
     };
 }
 const searchAscending = (grid, word) => {
-    const gridTransform = shiftColumnsUpByYIndex(grid);
+    const gridTransform = shiftColumns([...grid].reverse());
 
-    console.log({grid,gridTransform});
     const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
-    console.log({startYIndex, startXIndex, reversed, foundWord});
     if(foundWord){
-        const calculatedXStart = startXIndex+startYIndex;
-        const calculatedYStart = startXIndex;
-    console.log({startYIndex, startXIndex, reversed, foundWord,wordlength: word.length,calculatedYStart});
-        const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart-index},${calculatedYStart+index})`);
+        const calculatedXStart = startXIndex;
+        const calculatedYStart = grid.length-1-(startYIndex+startXIndex-grid.length+1);
+        const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart+index},${calculatedYStart-index})`);
         const orderedCoordinates = conditionallyReverse(reversed, coordinates);
         return convertToString(word, orderedCoordinates);
     };
 }
 const searchDescending = (grid, word) => {
-    const gridTransform = shiftColumnsDownByYIndex(grid);
+    const gridTransform = shiftColumns(grid);
     const {startYIndex, startXIndex, reversed, foundWord} = getStartingCoordinateInfo(gridTransform, word);
     if(foundWord){
-        console.log({grid,gridTransform});
         const calculatedXStart = startXIndex;
         const calculatedYStart = startYIndex+startXIndex-grid.length+1;
         const coordinates = range(0, word.length).map((index)=>`(${calculatedXStart+index},${calculatedYStart+index})`);
